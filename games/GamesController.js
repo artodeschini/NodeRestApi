@@ -2,18 +2,18 @@ const express = require("express");
 const router = express.Router();
 const Game = require("./Game");
 
-router.get("/games", (req, res) => {
+router.get("/", (req, res) => {
     Game.findAll().then(games => {
         res.statusCode = 200;
         res.json(games);
     }).catch((err) => {
         res.statusCode = 500;
-        res.json({message: "error to retrive games"});
+        res.json({message: "error to retrive "});
     });    
 });
 
 // find by id
-router.get("/games/:id", (req, res) => {
+router.get("/:id", (req, res) => {
     
     if (isNaN(req.params.id)) {    
         res.statusCode = 400;
@@ -36,7 +36,7 @@ router.get("/games/:id", (req, res) => {
 });
 
 // create
-router.post("/games", (req, res) => {
+router.post("/", (req, res) => {
 
     let {name,year, price} = req.body;
     
@@ -63,7 +63,7 @@ router.post("/games", (req, res) => {
     }
 });
 
-router.delete("/games/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
 
     if (isNaN(req.params.id)) {
         res.statusCode = 400;
@@ -96,7 +96,7 @@ router.delete("/games/:id", (req, res) => {
 });
 
 // update by id
-router.put("/games/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     
     if (isNaN(req.params.id)) {    
         res.statusCode = 400;
@@ -109,6 +109,7 @@ router.put("/games/:id", (req, res) => {
         let {name,year,price} = req.body;
         
         Game.findByPk(id).then(game => {
+            console.log(game);
             if (game != undefined) {
                 
                 if (name != undefined) {
@@ -124,11 +125,12 @@ router.put("/games/:id", (req, res) => {
                 }
 
                 Game.update(
-                    { game },
-                    { where: { id:id }}
+                    {'id': game.id, 'name': name, 'year': year, 'price': price },
+                    {where: { id:id }}
                 ).then(() => {
                     res.statusCode = 202;
                     res.json(game);
+
                 }).catch((err) => {
                     res.statusCode = 500;
                     res.json({message: 'Erro to update Game'});

@@ -5,11 +5,16 @@
 * Node
 * npm
 * git
+* mysql
+* docker
 
 ## npm deps
 
 * express
 * body-parser
+* sequelize
+* mysql2
+* cors
 
 ## install deps
 

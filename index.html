@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="widtd=device-widtd, initial-scale=1.0">
+    <title>Games</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <hr>
+    <h4>Lista de Games</h4>
+    <table id="rows">
+        <tr>
+            <td>id</td>
+            <td>nome</td>
+            <td>ano</td>
+            <td>preco</td>
+            <td>Editar</td>
+            <td>Deletar</td>
+        </tr>
+    </table>
+
+    <hr>
+    
+    <h4>Game</h4>
+
+    <p id="gameId"></p>
+    <label for="name">Nome</label>
+    <br>
+    <input type="text" id="name" name="name" placeholder="Digite o nome do Game">
+    <br>
+    <label for="year">Ano</label>
+    <br>
+    <input type="number" id="year" name="year" placeholder="Digite o ano do Game">
+    <br>
+    <label for="price">Preco</label>
+    <br>
+    <input type="number" id="price" name="price" placeholder="Digite o preco do Game">
+    <br>
+    <button type="button" onclick="addGame();">Criar</button>
+    <button type="button" onclick="updateGame();" style="display: none;" id="edit">Editar</button>
+
+
+
+</body>
+<script>
+
+    //onload page
+
+    //let rows = document.getElementById('games').getElementsByTagName('tbody')[0];
+    let rows = document.getElementById('rows');
+    let index = 1;
+
+    axios.get('/games').then(response => {
+        let games = response.data;
+
+        games.forEach(g => {
+            //tbody.appendChild(`<tr><td>${g.id}</td><td>${g.name}</td><td>${g.year}</td><td>${g.price}</td><td></td><td></td></tr>`);
+            // Insert a row at tde end of table
+            let newRow = rows.insertRow(index++);
+
+            // Insert a cell at tde end of tde row
+            var cellId = newRow.insertCell(0);
+            cellId.appendChild(document.createTextNode(g.id));
+            
+            // Insert a cell at tde end of tde row
+            var cellName = newRow.insertCell(1);
+            cellName.appendChild(document.createTextNode(g.name));
+
+            // Insert a cell at tde end of tde row
+            var cellYear = newRow.insertCell(2);
+            cellYear.appendChild(document.createTextNode(g.year));
+
+            // Insert a cell at tde end of tde row
+            var cellPrice = newRow.insertCell(3);
+            cellPrice.appendChild(document.createTextNode(g.price));
+
+            // Insert a cell at tde end of tde row
+            var cellEdit = newRow.insertCell(4);
+            var btnEdit = document.createElement('button');
+            btnEdit.innerHTML = 'Editar';
+            btnEdit.addEventListener('click', () => {getGameById(g.id) });
+
+            cellEdit.appendChild(btnEdit);
+
+             // Insert a cell at tde end of tde row
+            var cellDelete = newRow.insertCell(5);
+            var btnDel = document.createElement('button');
+            btnDel.innerHTML = 'Deletar';
+            btnDel.addEventListener('click', () => {deleteGame(g.id) });
+
+            cellDelete.appendChild(btnDel);
+
+        });
+    }).catch(error => {
+        console.log(error);
+    });
+
+    function addGame() {
+        let name = document.getElementById('name');
+        let year = document.getElementById('year');
+        let price = document.getElementById('price');
+
+        let newGame = {
+            "name": name.value,
+            "year": year.value,
+            "price": price.value
+        }
+        console.log(newGame);
+
+        axios.post("/games", newGame).then(response => {
+            window.location.replace("/");
+        }).catch(erro => {
+            console.log(erro);
+        });
+    }
+
+    function deleteGame(id) {
+        //alert(`/games/${id}`);
+        axios.delete(`/games/${id}`).then((response) => {
+            window.location.replace("/");
+        }).catch((erro) => {
+            console.log(erro);
+        });
+    }
+
+    function getGameById(id) {
+        //alert(`/games/${id}`);
+        axios.get(`/games/${id}`).then((response) => {
+            let game = response.data;
+
+            let id = document.getElementById('gameId');
+            
+            id.innerHTML = game.id;
+            document.getElementById('name').value = game.name;
+            document.getElementById('year').value = game.year;
+            document.getElementById('price').value = game.price;
+
+            id.style = 'ID: '
+
+            document.getElementById('edit').style = '';
+
+        }).catch((erro) => {
+            console.log(erro);
+        });
+    }
+
+    function updateGame() {
+        let name = document.getElementById('name');
+        let year = document.getElementById('year');
+        let price = document.getElementById('price');
+        let id = document.getElementById('gameId').textContent;
+
+        let updateGame = {
+            "id": id,
+            "name": name.value,
+            "year": year.value,
+            "price": price.value
+        }
+        console.log(updateGame);
+
+        axios.put(`/games/${id}`, updateGame).then(response => {
+            
+            console.log(response);
+            window.location.replace("/");
+            
+        }).catch(erro => {
+            console.log(erro);
+        });
+    }
+
+</script>
+
+</html>
