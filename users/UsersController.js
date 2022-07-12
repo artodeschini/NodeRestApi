@@ -22,8 +22,8 @@ function auth(req, res, next) {
             } else {
                
                 console.log(data);
-                req.token = token;
-                req.loggedUser = {'id': data.id, email: data.email};
+                // req.token = token;
+                // req.loggedUser = {'id': data.id, email: data.email};
 
                 next();
             }
@@ -37,7 +37,7 @@ function auth(req, res, next) {
 
 //router.post("/", adminAuth, (req, res) => {
 // criar usuario
-router.post("/", (req, res) => {
+router.post("/", auth, (req, res) => {
     let {nome,password, email} = req.body;
     
     if (nome == undefined || email == undefined || password == undefined) {
@@ -78,7 +78,7 @@ router.post("/", (req, res) => {
 });
 
 // router.get("/admin/users", adminAuth, (req, res) => {
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
     User.findAll().then(users => {
         res.status(200);
         res.json(users);
@@ -90,7 +90,7 @@ router.get("/", (req, res) => {
 });
 
 // editar usuario
-router.put("/:id", (req, res) => {
+router.put("/:id", auth, (req, res) => {
     let idValue = req.params.id;
     let {nome,password, email} = req.body;
     
@@ -141,7 +141,7 @@ router.put("/:id", (req, res) => {
 });
 
 // router.get("/admin/users", adminAuth, (req, res) => {
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
     User.findAll().then(users => {
         res.status(200);
         res.json(users);

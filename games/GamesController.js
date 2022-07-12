@@ -1,8 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const Game = require("./Game");
+const jwt = require('jsonwebtoken');
+const JWTSecrect = "jwtSecret123"; // o secret pode ser qualquer coisa mesmo
 
-router.get("/", (req, res) => {
+// middleware authorization
+function auth(req, res, next) {
+    const authorization = req.headers['authorization'];
+
+    if (authorization != undefined) {
+        let token = authorization.split(' ')[1];
+
+        jwt.verify(token, JWTSecrect, (error, data) => {
+            if (error) {
+                res.status(401);
+                res.send({message:"Token verificado invalido"});
+
+            } else {
+               
+                console.log(data);
+                req.token = token;
+                req.loggedUser = {'id': data.id, email: data.email};
+
+                next();
+            }
+        });
+
+    } else {
+        res.status(401);
+        res.send({message:"Token invalido"});
+    }
+ }
+
+router.get("/", auth, (req, res) => {
     Game.findAll().then(games => {
         res.status(200);
         res.json(games);
@@ -14,7 +44,7 @@ router.get("/", (req, res) => {
 });
 
 // find by id
-router.get("/:id", (req, res) => {
+router.get("/:id", auth, (req, res) => {
     
     if (isNaN(req.params.id)) {    
         res.status(400);
@@ -37,7 +67,7 @@ router.get("/:id", (req, res) => {
 });
 
 // create
-router.post("/", (req, res) => {
+router.post("/", auth, (req, res) => {
 
     let {name,year, price} = req.body;
     
@@ -64,7 +94,7 @@ router.post("/", (req, res) => {
     }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", auth, (req, res) => {
 
     if (isNaN(req.params.id)) {
         res.statusCode = 400;
@@ -97,7 +127,7 @@ router.delete("/:id", (req, res) => {
 });
 
 // update by id
-router.put("/:id", (req, res) => {
+router.put("/:id", auth, (req, res) => {
     
     if (isNaN(req.params.id)) {    
         res.status(400);

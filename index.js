@@ -34,6 +34,11 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
+// open html file
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/login.html");
+});
+
 app.listen(port, () =>{
     console.log("App start!")
 });

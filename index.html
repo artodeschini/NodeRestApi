@@ -8,14 +8,16 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+   
+
     <hr>
     <h4>Lista de Games</h4>
     <table id="rows">
         <tr>
-            <td>id</td>
-            <td>nome</td>
-            <td>ano</td>
-            <td>preco</td>
+            <td>Id</td>
+            <td>Nome</td>
+            <td>Ano</td>
+            <td>Preco</td>
             <td>Editar</td>
             <td>Deletar</td>
         </tr>
@@ -45,6 +47,19 @@
 
 </body>
 <script>
+    let token = localStorage.getItem("token");
+    console.log(token);    
+
+    let axiosConfig = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        } 
+    }
+
+    console.log(axiosConfig);
 
     //onload page
 
@@ -52,7 +67,7 @@
     let rows = document.getElementById('rows');
     let index = 1;
 
-    axios.get('/games').then(response => {
+    axios.get('/games', axiosConfig).then(response => {
         let games = response.data;
 
         games.forEach(g => {
@@ -109,7 +124,7 @@
         }
         console.log(newGame);
 
-        axios.post("/games", newGame).then(response => {
+        axios.post("/games", axiosConfig, newGame).then(response => {
             window.location.replace("/");
         }).catch(erro => {
             console.log(erro);
@@ -118,7 +133,7 @@
 
     function deleteGame(id) {
         //alert(`/games/${id}`);
-        axios.delete(`/games/${id}`).then((response) => {
+        axios.delete(`/games/${id}`, axiosConfig).then((response) => {
             window.location.replace("/");
         }).catch((erro) => {
             console.log(erro);
@@ -127,12 +142,12 @@
 
     function getGameById(id) {
         //alert(`/games/${id}`);
-        axios.get(`/games/${id}`).then((response) => {
+        axios.get(`/games/${id}`, axiosConfig).then((response) => {
             let game = response.data;
 
             let id = document.getElementById('gameId');
             
-            id.innerHTML = game.id;
+            id.innerHTML = game.id;axiosConfig, 
             document.getElementById('name').value = game.name;
             document.getElementById('year').value = game.year;
             document.getElementById('price').value = game.price;
@@ -160,7 +175,7 @@
         }
         console.log(updateGame);
 
-        axios.put(`/games/${id}`, updateGame).then(response => {
+        axios.put(`/games/${id}`, axiosConfig, updateGame).then(response => {
             
             console.log(response);
             window.location.replace("/");
