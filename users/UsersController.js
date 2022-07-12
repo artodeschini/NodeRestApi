@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const User = require("./User");
+const jwt = require('jsonwebtoken');
 // const bcrypt = require("bcryptjs");
 // const adminAuth = require("../middlewares/adminAuth");
+
+const JWTSecrect = "qualquer_coisa"; // o secret pode ser qualquer coisa mesmo
 
 //router.post("/", adminAuth, (req, res) => {
 // criar usuario
@@ -75,10 +78,24 @@ router.post("/auth", (req, res) => {
             res.send({message:"Usuario nao encontrado"});
         } else {
             if (user.password == password) {
-                res.statusCode = 200;
-                res.send({token:"UM TOKEN A SER GERADO"});
+
+                jwt.sign(
+                    {id: user.id, email: user.email},
+                    JWTSecrect,
+                    {expiresIn: '1h'},
+                    (error, token) => {
+                        if (error) {
+                            res.status(400);
+                            res.send({message:"Erro ao gerar o token"});
+                        } else {
+                            res.status(200);
+                            res.send({'token': token});
+                        }
+                    }
+                );
+                
             } else {
-                res.statusCode = 401;
+                res.status(401);
                 res.send({message:"Credenciais invalidas"});
             }
            

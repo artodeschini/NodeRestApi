@@ -15,6 +15,7 @@
 * sequelize
 * mysql2
 * cors
+* jwt
 
 ## install deps
 
@@ -23,7 +24,8 @@ npm install express --save
 npm install body-parser --save
 npm install --save sequelize
 npm install --save mysql2
-npm install --save cors 
+npm install --save cors
+npm install --save javawebtoken
 ```
 
 ## front use
