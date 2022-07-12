@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const JWTSecrect = "jwtSecret123"; // o secret pode ser qualquer coisa mesmo
 const secret_salt = 10;
 
+// middleware authorization
 function auth(req, res, next) {
     const authorization = req.headers['authorization'];
 
@@ -201,6 +202,12 @@ router.post("/auth", (req, res) => {
         res.status(500);
         res.json({message:"Erro ao tentar recuperar usuario pelo email"});
     });
+});
+
+router.get("/teste", auth, (req, res) => {
+    res.status(200);
+    res.json({message:"Chamando API Segura"});
+
 });
 
 module.exports = router;
