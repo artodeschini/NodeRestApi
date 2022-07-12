@@ -23,4 +23,9 @@ npm install express --save
 npm install body-parser --save
 npm install --save sequelize
 npm install --save mysql2
+npm install --save cors 
 ```
+
+## front use
+
+* axios to consume api REST

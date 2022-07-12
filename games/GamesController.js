@@ -4,10 +4,11 @@ const Game = require("./Game");
 
 router.get("/", (req, res) => {
     Game.findAll().then(games => {
-        res.statusCode = 200;
+        res.status(200);
         res.json(games);
+
     }).catch((err) => {
-        res.statusCode = 500;
+        res.status(500);
         res.json({message: "error to retrive "});
     });    
 });
@@ -16,7 +17,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     
     if (isNaN(req.params.id)) {    
-        res.statusCode = 400;
+        res.status(400);
         res.send("id need to be a number");
 
     } else {
@@ -42,7 +43,7 @@ router.post("/", (req, res) => {
     
     if (name == undefined || year == undefined || price == undefined) {
 
-        res.statusCode = 400;
+        res.status(400);
         res.send({message:"Send correct data to create new game"});
 
     } else {
@@ -53,11 +54,11 @@ router.post("/", (req, res) => {
             
             const dataObj = result.get({plain:true})
             
-            res.statusCode = 201
+            res.status(201);
             res.send(dataObj);
 
         }).catch((err) => {
-            res.statusCode = 500;
+            res.status(500);
             res.send({message:"Send correct data to create new game"});
         });
     }
@@ -85,7 +86,7 @@ router.delete("/:id", (req, res) => {
 
             } else {
 
-                res.statusCode = 400;
+                res.status(400);
                 res.send("id need to be a number");
             }
         } else {
@@ -99,7 +100,7 @@ router.delete("/:id", (req, res) => {
 router.put("/:id", (req, res) => {
     
     if (isNaN(req.params.id)) {    
-        res.statusCode = 400;
+        res.status(400);
         res.send("id need to be a number");
 
     } else {
@@ -128,16 +129,16 @@ router.put("/:id", (req, res) => {
                     {'id': game.id, 'name': name, 'year': year, 'price': price },
                     {where: { id:id }}
                 ).then(() => {
-                    res.statusCode = 202;
+                    res.status(202);
                     res.json(game);
 
                 }).catch((err) => {
-                    res.statusCode = 500;
+                    res.status(500);
                     res.json({message: 'Erro to update Game'});
                 });
 
             } else {
-                res.statusCode = 404;
+                res.status(404);
                 res.send({message: "not found"});
             }
         });
