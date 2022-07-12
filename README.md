@@ -16,6 +16,7 @@
 * mysql2
 * cors
 * jwt
+* bcryptjs
 
 ## install deps
 
@@ -25,7 +26,8 @@ npm install body-parser --save
 npm install --save sequelize
 npm install --save mysql2
 npm install --save cors
-npm install --save javawebtoken
+npm install --save jsonwebtoken
+npm install --save bcryptjs
 ```
 
 ## front use

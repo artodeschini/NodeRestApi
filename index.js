@@ -26,9 +26,6 @@ connection.authenticate()
         console.log(error);
     });
 
-
-
-
 app.use("/games", gamesController);
 app.use("/users", usersController);
 
