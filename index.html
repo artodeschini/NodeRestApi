@@ -67,7 +67,10 @@
     let rows = document.getElementById('rows');
     let index = 1;
 
-    axios.get('/games', axiosConfig).then(response => {
+    axios.get(
+        '/games',
+        axiosConfig
+    ).then(response => {
         let games = response.data;
 
         games.forEach(g => {
@@ -124,7 +127,12 @@
         }
         console.log(newGame);
 
-        axios.post("/games", axiosConfig, newGame).then(response => {
+        axios.post(
+            "/games",
+             newGame,
+             axiosConfig
+
+        ).then(response => {
             window.location.replace("/");
         }).catch(erro => {
             console.log(erro);
@@ -133,7 +141,10 @@
 
     function deleteGame(id) {
         //alert(`/games/${id}`);
-        axios.delete(`/games/${id}`, axiosConfig).then((response) => {
+        axios.delete(
+            `/games/${id}`,
+             axiosConfig
+        ).then((response) => {
             window.location.replace("/");
         }).catch((erro) => {
             console.log(erro);
@@ -142,7 +153,10 @@
 
     function getGameById(id) {
         //alert(`/games/${id}`);
-        axios.get(`/games/${id}`, axiosConfig).then((response) => {
+        axios.get(
+            `/games/${id}`,
+             axiosConfig
+        ).then((response) => {
             let game = response.data;
 
             let id = document.getElementById('gameId');
@@ -175,7 +189,11 @@
         }
         console.log(updateGame);
 
-        axios.put(`/games/${id}`, axiosConfig, updateGame).then(response => {
+        axios.put(
+            `/games/${id}`, 
+            updateGame,
+            axiosConfig
+        ).then(response => {
             
             console.log(response);
             window.location.replace("/");
